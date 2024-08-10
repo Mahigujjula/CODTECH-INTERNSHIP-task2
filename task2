@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task & Project Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px;
+text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .form-container {
+            margin: 20px 0;
+        }
+        .form-container input, .form-container select, .form-container button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .form-container input[type="text"], .form-container select {
+            width: calc(100% - 22px);
+            border: 1px solid #ddd;
+        }
+        .form-container button {
+            border: none;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background: #555;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+  border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-list button {
+            background: red;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .task-list button:hover {
+            background: darkred;
+        }
+        .project-list {
+            margin-top: 20px;
+        }
+        .project-list li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Task & Project Manager</h1>
+        </div>
+    </header>
+ <div class="container">
+        <div class="form-container">
+            <h2>Add Project</h2>
+            <input type="text" id="projectInput" placeholder="Enter project name">
+            <button onclick="addProject()">Add Project</button>
+        </div>
+
+        <div class="form-container">
+            <h2>Add Task</h2>
+            <select id="projectSelect">
+                <option value="">Select a project</option>
+            </select>
+            <input type="text" id="taskInput" placeholder="Enter task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <h2>Projects</h2>
+        <ul id="projectList" class="project-list"></ul>
+
+        <h2>Tasks</h2>
+        <ul id="taskList" class="task-list"></ul>
+    </div>
+
+    <script>
+        const projects = [];
+        const tasks = [];
+
+        function addProject() {
+            const projectInput = document.getElementById('projectInput');
+            const projectName = projectInput.value.trim();
+            if (projectName === '') return;
+
+            projects.push(projectName);
+            updateProjectList();
+  projectInput.value = '';
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const projectSelect = document.getElementById('projectSelect');
+            const taskText = taskInput.value.trim();
+            const projectName = projectSelect.value;
+            if (taskText === '' || projectName === '') return;
+
+            tasks.push({ text: taskText, project: projectName });
+            updateTaskList();
+            taskInput.value = '';
+        }
+
+        function updateProjectList() {
+            const projectList = document.getElementById('projectList');
+            const projectSelect = document.getElementById('projectSelect');
+
+            projectList.innerHTML = '';
+            projectSelect.innerHTML = '<option value="">Select a project</option>';
+
+            projects.forEach(project => {
+                const li = document.createElement('li');
+                li.textContent = project;
+                projectList.appendChild(li);
+
+                const option = document.createElement('option');
+                option.value = project;
+                option.textContent = project;
+                projectSelect.appendChild(option);
+            });
+        }
+function updateTaskList() {
+            const taskList = document.getElementById('taskList');
+
+            taskList.innerHTML = '';
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = ${task.text} (Project: ${task.project});
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => {
+                    const index = tasks.indexOf(task);
+                    if (index > -1) {
+                        tasks.splice(index, 1);
+                        updateTaskList();
+                    }
+                };
+
+                li.appendChild(deleteButton);
+                taskList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
